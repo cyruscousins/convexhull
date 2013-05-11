@@ -57,7 +57,6 @@ public class JarvisMarch extends CHAlgorithm{
 			angle = lastP.angleTo(newP);
 
 			newTheta = lastP.angleTo(newP);
-			System.out.println(newTheta);
 			if(newTheta < oldTheta){
 				oldTheta -= 2 * Math.PI;
 			}

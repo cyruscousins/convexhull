@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
+import javax.swing.border.LineBorder;
 
 import algorithm.CHAlgorithm;
 import algorithm.GrahamScan;
@@ -38,7 +39,6 @@ public class OptionPanel extends JPanel implements ActionListener{
 	GUIHub parent;
 	
 	JTextArea ptsTextArea;
-	
 	
 	boolean animationOn = true;
 	
@@ -114,12 +114,11 @@ public class OptionPanel extends JPanel implements ActionListener{
 
 
 	public JButton[] algorithmButtons;
-	public static final int ALGORITHM_JARVIS = 0, ALGORITHM_GRAHAM = 1, ALGORITHM_INCREMENTAL = 2, ALGORITHM_ULTIMATE = 3;
-	public static final String[] algorithmNames = new String[]{"Jarvis March", "Graham Scan", "Incremental Hull", "Ultimate Planar CH"};
+	public static final int ALGORITHM_JARVIS = 0, ALGORITHM_GRAHAM = 1, ALGORITHM_ULTIMATE = 2;
+	public static final String[] algorithmNames = new String[]{"Jarvis March", "Graham Scan", "Ultimate Planar CH"};
 	public static final String[] algorithmTips = new String[]{
 		"Calculate the convex hull using the Jarvis March algorithm", 
 		"Calculate the convex hull using the Graham Scan algorithm",
-		"Calculate the convex hull using the Incremental Hull algorithm",
 		"Calculate the convex hull using the Kirkpatrick-Seidel Ultimate Planar Convex Hull algorithm"
 	};
 	
@@ -138,7 +137,7 @@ public class OptionPanel extends JPanel implements ActionListener{
 	public static final String ACTION = "Action", ALGORITHM = "Algorithm", CONTROL = "Control"; //Used as identifiers on buttons.
 	
 	public static final int SLIDER_SENSITIVITY = 0, SLIDER_RANDOM = 1, SLIDER_SPEED = 2;
-	String[] sliderNames = new String[]{"Selection sensitivity", "Random count", "Speed"};
+	String[] sliderNames = new String[]{"Selection sensitivity", "Random count", "Algorithm sleep time"};
 	int[] mins = new int[]{1, 1, 1}, maxes = new int[]{16, 255, 64}, values = new int[]{6, 32, 8};
 	JSlider[] sliders;
 	
@@ -215,7 +214,11 @@ public class OptionPanel extends JPanel implements ActionListener{
 		add(buttonPanel);
 		add(scroll);
 		
+		JLabel algorithmButtonPanelLabel = new JLabel("Convex Hull Algorithms:");
+		algorithmButtonPanelLabel.setFont(GUIConstants.BUTTON_FONT);
+		
 		JPanel algorithmButtonPanel = new JPanel(new GridLayout(2, 3));
+		algorithmButtonPanel.add(algorithmButtonPanelLabel);
 		algorithmButtons = new JButton[algorithmNames.length];
 		
 		for(int i = 0; i < algorithmButtons.length; i++){
@@ -239,8 +242,11 @@ public class OptionPanel extends JPanel implements ActionListener{
 		
 		for(int i = 0; i < controlButtons.length; i++){
 			controlButtons[i] = new JButton(controlNames[i]);
+			
 			controlButtons[i].setFont(GUIConstants.BUTTON_FONT);
 			controlButtons[i].setToolTipText(controlTips[i]);
+			controlButtons[i].setBorder(new LineBorder(Color.WHITE, 1));
+			
 			controlButtons[i].setActionCommand(CONTROL);
 			controlButtons[i].addActionListener(this);
 			controlButtonPanel.add(controlButtons[i]);

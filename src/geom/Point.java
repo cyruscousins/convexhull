@@ -3,9 +3,16 @@ package geom;
 public class Point {
 	public int x, y;
 	
+	public Point(Point p){
+		set(p);
+	}
+	
 	public Point(int x, int y) {
-		this.x = x;
-		this.y = y;
+		set(x, y);
+	}
+
+	public void set(Point p){
+		set(p.x, p.y);
 	}
 	
 	public void set(int x, int y){

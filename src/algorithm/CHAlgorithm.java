@@ -34,22 +34,23 @@ public abstract class CHAlgorithm implements Runnable{
 	
 	Color originalColor;  //Keep track of the color of the active pointset.
 	
-	public CHAlgorithm(GUIConsole console, ComplexityAnalysis complexity, PointCanvas canvas, PointSetCollection set, int sleepTime, boolean animated){
+	public CHAlgorithm(GUIConsole console, ComplexityAnalysis complexity, PointCanvas canvas, PointSetCollection sets, int sleepTime, boolean animated){
 		this.console = console;
 		this.canvas = canvas;
-		this.sets = set;
+		this.sets = sets;
 		this.sleepTime = sleepTime;
 		this.animated = animated;
 		
-		activePoints = set.activePoints.get(0);
+		activePoints = sets.activePoints.get(0);
+		sets.convexHullComplete = false;
 		
 		convexHull = new PointSet(Color.ORANGE);
-		set.convexHull = new ArrayList<PointSet>();
-		set.convexHull.add(convexHull);
+		sets.convexHull = new ArrayList<PointSet>();
+		sets.convexHull.add(convexHull);
 		
 		sweeperLen = (int)(Math.sqrt(1 + canvas.width * canvas.width + canvas.height * canvas.height));
 		
-		originalColor = set.activePoints.get(0).color;
+		originalColor = sets.activePoints.get(0).color;
 		
 		this.complexity = complexity;
 		complexity.reset();
@@ -75,6 +76,7 @@ public abstract class CHAlgorithm implements Runnable{
 	}
 	public void relinquishControl(){
 		canvas.parent.analysisPanel.complexity.updatePanel();
+		canvas.parent.complexityLog.setText(complexity.getLog());
 		if(!animated) return;
 		canvas.repaint();
 //		while(!on){
@@ -97,11 +99,10 @@ public abstract class CHAlgorithm implements Runnable{
 		sets.consolidateActivePoints();
 		sets.activePoints.get(0).removeDuplicates();
 		sets.activePoints.get(0).color = originalColor;
+		sets.convexHullComplete = true;
 		
-		//Unanimated algorithms render upon completion
-		if(!animated){
-			canvas.repaint();
-		}
+		//Render
+		canvas.repaint();
 	}
 	
 	boolean isFinished(){

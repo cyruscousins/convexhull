@@ -30,6 +30,10 @@ public class GUIConsole extends JScrollPane{
 		text.setCaretPosition(text.getText().length());
 		text.repaint();
 	}
+	public void setText(String s){
+		text.setText(s);
+		text.setCaretPosition(text.getText().length());
+	}
 	public void clear(){
 		text.setText("");
 		text.repaint();

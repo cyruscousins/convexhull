@@ -14,6 +14,7 @@ import java.awt.event.MouseMotionListener;
 import java.security.acl.Owner;
 
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 public class PointCanvas extends JPanel implements MouseListener, MouseMotionListener, ComponentListener{
 	public int width, height;
@@ -32,6 +33,8 @@ public class PointCanvas extends JPanel implements MouseListener, MouseMotionLis
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		addComponentListener(this);
+		
+		setBorder(new LineBorder(Color.BLACK, 4));
 	}
 	
 	public void paint(Graphics g) {

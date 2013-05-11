@@ -16,6 +16,8 @@ public class RealTimeCHAlgorithmController implements CHAlgorithmController{
 	public RealTimeCHAlgorithmController(Main main, CHAlgorithm algorithm){
 		this.main = main;
 		this.algorithm = algorithm;
+		
+		pause();
 	}
 
 	public static final int MODE_SLEEP = 0, MODE_WAIT = 1, MODE_CONTINUOUS = 2;
@@ -81,6 +83,8 @@ public class RealTimeCHAlgorithmController implements CHAlgorithmController{
 	}
 	
 	public void skip(){
+		unpause();
+		algorithm.animated = false;
 		algorithmMode = MODE_CONTINUOUS;
 	}
 	

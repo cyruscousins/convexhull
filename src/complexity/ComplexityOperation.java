@@ -8,8 +8,6 @@ public class ComplexityOperation {
 
 	public static final DecimalFormat decFormat = new DecimalFormat("000.0000");
 	
-	
-	
 	String[] varnames;
 	
 	public static final int LIN=0, LOG=1;

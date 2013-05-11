@@ -68,11 +68,19 @@ public class ComplexityAnalysis {
 	public String[][] detailedInfoAll(){
 		String[][] retval = new String[keys.size() + 1][];
 		retval[0] = new String[1];
-		retval[0][0] = "Total cost of all operations = " + totalCostAll();
+		retval[0][0] = "Total cost of all operations = " + ComplexityOperation.decFormat.format(totalCostAll());
 		for(int i = 0; i < keys.size(); i++){
 			retval[i + 1] = detailedInfo(keys.get(i));
 		}
 		
+		return retval;
+	}
+	
+	public String getLog(){
+		String retval = "";
+		for(int i = 0; i < log.size(); i++){
+			retval += log.get(i) + "\n";
+		}
 		return retval;
 	}
 	
@@ -127,8 +135,6 @@ public class ComplexityAnalysis {
 		}
 		
 	}
-	
-	
 	
 	//Sort function.  A terrible sorting algorithm that I made up myself!
 	//Gives the indices that each item in data would take if it were sorted.  

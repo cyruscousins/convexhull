@@ -151,7 +151,46 @@ public class UltimateCH extends CHAlgorithm{
 	}
 	
 	public void calcTopHullRecurse(PointSet topHull, PointSet points){
+
+		Point minPt = points.getMinX();
+		Point maxPt = points.getMaxX();
 		
+		int min = minPt.x;
+		int max = maxPt.x;
+		
+		//TODO split about median.
+		double splitLine = (max + min) / 2 + .5; //split along a fraction, so no point is on the split line.
+		PointSet leftSplit = points.copyLeftPts(splitLine);
+		PointSet rightSplit = points.copyRightPts(splitLine);
+		
+		leftSplit.color = getNextColor(); //TODO red and blue? (or 2 set colors)
+		rightSplit.color = getNextColor();
+		
+		console.println("The region between " + min + " and " + max + " is split roughly in half about the line x = " + splitLine + ".");
+		console.println("The left side is colored " + ColorManager.nameColor(leftSplit.color) + ", and the right side is colored " + ColorManager.nameColor(rightSplit.color));
+
+		sets.activePoints.remove(points);
+		sets.activePoints.add(leftSplit);
+		sets.activePoints.add(rightSplit);
+		
+		Point[] np = findTopBridge(leftSplit, rightSplit);
+		addToTopHull(topHull, np);
+		
+		if(np[0] != minPt){ //need to do a split on the left
+			PointSet left = leftSplit.removeLeftPts(np[0].x);
+			left.add(np[0]);
+			if(left.size() > 2){
+				calcTopHullRecurse(topHull, left);
+			}
+		}
+		if(np[1] != maxPt){ //need to do a further split on the right
+			PointSet right = rightSplit.removeRightPts(np[1].x);
+			right.add(np[1]);
+			if(right.size() > 2){
+				calcTopHullRecurse(topHull, right);
+			}
+		}
+		/*
 		Point minPt = points.getMinX();
 		Point maxPt = points.getMaxX();
 		
@@ -164,7 +203,10 @@ public class UltimateCH extends CHAlgorithm{
 		points.sortX();
 		
 		int splitIndex = points.size() / 2;
-		double splitLine = (points.get(splitIndex).x + points.get(splitIndex - 1).x) / 2.0;
+		double splitLine;
+		//Even number of points
+		if(points.size() % 2 == 0) splitLine = (points.get(splitIndex).x + points.get(splitIndex - 1).x) / 2.0;
+		else splitLine = points.get(splitIndex).x;
 		
 		PointSet rightSplit = points.copyAfterIndex(splitIndex);
 		PointSet leftSplit = points.copyBeforeIndex(splitIndex);
@@ -177,14 +219,15 @@ public class UltimateCH extends CHAlgorithm{
 		console.println("Calculating the top hull of the region between " + min + " and " + max + ".  This region is colored " + ColorManager.nameColor(points.color));
 		relinquishControl();
 
-		sets.activePoints.remove(points);
 		
 		console.println("The region between " + min + " and " + max + " is split roughly in half about the line x = " + splitLine + ".");
 		console.println("The left side is colored " + ColorManager.nameColor(leftSplit.color) + ", and the right side is colored " + ColorManager.nameColor(rightSplit.color));
 
 		PointSet workingLeft = new PointSet(leftSplit);
 		PointSet workingRight = new PointSet(rightSplit);
-		
+
+		//Show the working split, so the user can see points added and removed.
+		sets.activePoints.remove(points);
 		sets.activePoints.add(workingLeft);
 		sets.activePoints.add(workingRight);
 		
@@ -197,6 +240,7 @@ public class UltimateCH extends CHAlgorithm{
 		sets.activePoints.remove(workingLeft);
 		sets.activePoints.remove(workingRight);
 		
+		 
 		if(np[0] != minPt){ //need to do a split on the left
 			
 			sets.activePoints.add(rightSplit); //graphics
@@ -222,6 +266,7 @@ public class UltimateCH extends CHAlgorithm{
 
 			sets.activePoints.remove(leftSplit); //graphics
 		}
+		 */
 	}
 	
 	//This function calculates the bottom hull.  It operates by flipping everything in logic, and

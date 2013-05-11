@@ -22,6 +22,7 @@ public class GUIHub extends JPanel{
 	
 	public GUIConsole console;
 	public ComplexityAnalysis complexity;
+	public GUIConsole complexityLog;
 	
 	public AnalysisPanel analysisPanel;
 	
@@ -41,9 +42,10 @@ public class GUIHub extends JPanel{
 		//Analysis panel.  Contains console and complexity analyzer
 		console = new GUIConsole();
 		complexity = new ComplexityAnalysis();
+		complexityLog = new GUIConsole();
 		ComplexityPanel complexityPanel = new ComplexityPanel(complexity);
 		
-		analysisPanel = new AnalysisPanel(console, complexityPanel);
+		analysisPanel = new AnalysisPanel(console, complexityPanel, complexityLog);
 		
 		canvas = new PointCanvas(400, 400, this);
 

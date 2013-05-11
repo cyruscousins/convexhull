@@ -26,6 +26,12 @@ public class PointSet extends ArrayList<Point>{
 	public PointSet(PointSet copy){
 		super(copy);
 		this.color = copy.color;
+		
+		//Deep copy code:
+//		super(copy.size());
+//		for(int i = 0; i < copy.size(); i++){
+//			add(new Point(copy.get(i)));
+//		}
 	}
 	
 	//Pointset stuff that is helpful.
@@ -450,7 +456,8 @@ public class PointSet extends ArrayList<Point>{
 		if(ps.renderUpsideDown){
 			y = ps.maxY - y;
 		}
-		g.drawOval(p.x - 2, y - 2, 4, 4);
+//		g.drawOval(p.x - 2, y - 2, 4, 4);
+		g.fillOval(p.x - 2, y - 2, 4, 4);
 		
 		if(renderNumber){
 			g.drawString("" + index, p.x, y + 12);
@@ -476,7 +483,8 @@ public class PointSet extends ArrayList<Point>{
 		}
 	}
 	
-	public void advancedRender(Graphics g, PointSetCollection ps, boolean fade, boolean number, boolean drawLines){
+	public static final int LINEMODE_NONE = 0, LINEMODE_CIRCULAR = 1, LINEMODE_LINEAR = 2;
+	public void advancedRender(Graphics g, PointSetCollection ps, boolean fade, boolean number, int lineMode){
 		int l = size();
 		int r0 = color.getGreen(), g0 = color.getGreen(), b0 = color.getBlue();
 		
@@ -496,15 +504,18 @@ public class PointSet extends ArrayList<Point>{
 			
 			renderPoint(g, ps, i, number);
 			
-			if(drawLines){
+			if(!(lineMode == LINEMODE_NONE)){
 				Point nextP;
 				if(i + 1 == size()){
-					nextP = get(0);
+					if(lineMode == LINEMODE_CIRCULAR){
+						nextP = get(0);
+						renderLine(g, ps, get(i), nextP);
+					}
 				}
 				else{
 					nextP = get(i + 1);
+					renderLine(g, ps, get(i), nextP);
 				}
-				renderLine(g, ps, get(i), nextP);
 			}
 		}
 	}

@@ -32,6 +32,8 @@ public class PointSetCollection {
 	
 	//Some algorithms require this hack.
 	public boolean renderUpsideDown;
+	
+	public boolean convexHullComplete = false; //When this is true, convex hulls are drawn as circular chains (the first and last are joined).  When false, they are not joined.
 	int maxX;
 
 	public int maxY;
@@ -163,7 +165,7 @@ public class PointSetCollection {
 		
 		for(PointSet p : activePoints){
 //			p.render(g, this);
-			p.advancedRender(g, this, fading, numbering, false);
+			p.advancedRender(g, this, fading, numbering, PointSet.LINEMODE_NONE);
 		}
 		
 		for(PointSet p : degeneratePoints){
@@ -171,7 +173,14 @@ public class PointSetCollection {
 		}
 		
 		for(PointSet p : convexHull){
-			p.advancedRender(g, this, true, true, true);
+			int lineMode;
+			if(convexHullComplete){
+				lineMode = PointSet.LINEMODE_CIRCULAR;
+			}
+			else{
+				lineMode = PointSet.LINEMODE_LINEAR;
+			}
+			p.advancedRender(g, this, true, true, lineMode);
 		}
 		
 		for(PointSet p : pairedPoints){
@@ -179,7 +188,7 @@ public class PointSetCollection {
 		}
 		
 		if(sweeper != null){
-			sweeper.advancedRender(g, this, false, false, true);
+			sweeper.advancedRender(g, this, false, false, PointSet.LINEMODE_LINEAR);
 		}
 	}
 }
